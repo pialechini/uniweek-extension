@@ -1,11 +1,22 @@
-import reloadOnUpdate from 'virtual:reload-on-update-in-background-script';
+import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
 
-reloadOnUpdate('pages/background');
+reloadOnUpdate("pages/background");
 
-/**
- * Extension reloading is necessary because the browser automatically caches the css.
- * If you do not use the css of the content script, please delete it.
- */
-reloadOnUpdate('pages/content/style.scss');
+async function getCurrentTab() {
+  const queryOptions = { active: true, lastFocusedWindow: true };
+  const [tab] = await chrome.tabs.query(queryOptions);
+  return tab;
+}
 
-console.log('background loaded');
+chrome.commands.onCommand.addListener(async command => {
+  console.log(command);
+
+  if (command !== "getWeekSchedule") {
+    return;
+  }
+
+  const tab = await getCurrentTab();
+  chrome.tabs.sendMessage(tab.id, {
+    action: "getWeekSchedule",
+  });
+});

@@ -9,18 +9,10 @@ const manifest: chrome.runtime.ManifestV3 = {
   version: packageJson.version,
   description: packageJson.description,
   permissions: ["storage"],
-  options_page: "src/pages/options/index.html",
   background: {
     service_worker: "src/pages/background/index.js",
     type: "module",
   },
-  // action: {
-  //   default_popup: "src/pages/popup/index.html",
-  //   default_icon: "icon-34.png",
-  // },
-  // chrome_url_overrides: {
-  //   newtab: "src/pages/newtab/index.html",
-  // },
   icons: {
     "16": "icon-16.png",
     "32": "icon-32.png",
@@ -31,8 +23,6 @@ const manifest: chrome.runtime.ManifestV3 = {
     {
       matches: ["http://*/*", "https://*/*", "<all_urls>"],
       js: ["src/pages/content/index.js"],
-      // KEY for cache invalidation
-      css: ["assets/css/contentStyle<KEY>.chunk.css"],
     },
   ],
   web_accessible_resources: [
@@ -41,6 +31,14 @@ const manifest: chrome.runtime.ManifestV3 = {
       matches: ["*://*/*"],
     },
   ],
+  commands: {
+    getWeekSchedule: {
+      suggested_key: {
+        default: "Alt+B",
+      },
+      description: "get week schedule from the page",
+    },
+  },
 };
 
 export default manifest;
