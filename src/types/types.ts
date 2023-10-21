@@ -1,4 +1,4 @@
-import { defaultTheme } from "../pages/content/theme/defaultTheme";
+import { defaultTheme } from "@pages/content/theme/defaultTheme";
 
 export interface MessageObject {
   action: string;

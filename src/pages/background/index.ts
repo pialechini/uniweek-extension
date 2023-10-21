@@ -9,8 +9,6 @@ async function getCurrentTab() {
 }
 
 chrome.commands.onCommand.addListener(async command => {
-  console.log(command);
-
   if (command !== "getWeekSchedule") {
     return;
   }
