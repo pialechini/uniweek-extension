@@ -21,14 +21,23 @@ const manifest: chrome.runtime.ManifestV3 = {
   },
   content_scripts: [
     {
-      matches: ["http://*/*", "https://*/*", "<all_urls>"],
+      matches: ["https://golestan.shahroodut.ac.ir/*"],
       js: ["src/pages/content/index.js"],
+      css: ["assets/css/contentStyle<KEY>.chunk.css"],
     },
   ],
   web_accessible_resources: [
     {
-      resources: ["assets/js/*.js", "assets/css/*.css", "icon-16.png", "icon-32.png", "icon-48.png", "icon-128.png"],
-      matches: ["*://*/*"],
+      resources: [
+        "verification.html",
+        "assets/js/*.js",
+        "assets/css/*.css",
+        "icon-16.png",
+        "icon-32.png",
+        "icon-48.png",
+        "icon-128.png",
+      ],
+      matches: ["https://golestan.shahroodut.ac.ir/*"],
     },
   ],
   commands: {

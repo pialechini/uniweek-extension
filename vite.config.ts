@@ -49,14 +49,10 @@ export default defineConfig({
     reportCompressedSize: isProduction,
     rollupOptions: {
       input: {
-        // devtools: resolve(pagesDir, 'devtools', 'index.html'),
-        // panel: resolve(pagesDir, 'panel', 'index.html'),
         content: resolve(pagesDir, "content", "index.ts"),
+        verification: resolve(pagesDir, "content", "verification", "main.tsx"),
+        contentStyle: resolve(pagesDir, "content", "style.scss"),
         background: resolve(pagesDir, "background", "index.ts"),
-        // contentStyle: resolve(pagesDir, 'content', 'style.scss'),
-        popup: resolve(pagesDir, "popup", "index.html"),
-        // newtab: resolve(pagesDir, 'newtab', 'index.html'),
-        // options: resolve(pagesDir, 'options', 'index.html'),
       },
       output: {
         entryFileNames: "src/pages/[name]/index.js",
@@ -65,9 +61,9 @@ export default defineConfig({
           const { dir, name: _name } = path.parse(assetInfo.name);
           const assetFolder = dir.split("/").at(-1);
           const name = assetFolder + firstUpperCase(_name);
-          // if (name === "contentStyle") {
-          // return `assets/css/contentStyle${cacheInvalidationKey}.chunk.css`;
-          // }
+          if (name === "contentStyle") {
+            return `assets/css/contentStyle${cacheInvalidationKey}.chunk.css`;
+          }
           return `assets/[ext]/${name}.chunk.[ext]`;
         },
       },
