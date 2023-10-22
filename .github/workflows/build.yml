@@ -1,0 +1,61 @@
+name: Build And Upload Extension Zip
+
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    permissions: write-all
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - run: npm install
+
+      - name: Get version from package.json
+        id: get_version
+        run: echo ::set-output name=version::$(jq -r '.version' package.json)
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          release_name: Release ${{ steps.get_version.outputs.version }}
+          prerelease: false
+          draft: false
+
+      - name: Create Chrome Extension Zip
+        run: npm run build && mv dist chrome && zip -r chrome.zip chrome
+
+      - name: Upload Chrome Extension Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./chrome.zip
+          asset_name: chrome.zip
+          asset_content_type: application/zip
+
+      - name: Create Firefox Extension Zip
+        run: npm run build:firefox && mv dist firefox && zip -r firefox.zip firefox
+
+      - name: Upload Firefox Extension Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./firefox.zip
+          asset_name: firefox.zip
+          asset_content_type: application/zip
