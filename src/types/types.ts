@@ -12,9 +12,24 @@ export interface UniClass {
 
 export type DaySchedule = Array<UniClass | null>;
 export type WeekSchedule = DaySchedule[];
+export interface WeekSchedules {
+  evenWeekSchedule: WeekSchedule;
+  oddWeekSchedule: WeekSchedule;
+}
 
 export type UniClassWithEvenOdd = UniClass & { evenOdd?: "even" | "odd" };
 export type DayScheduleWithEvenOdd = Array<UniClassWithEvenOdd | null>;
 export type WeekScheduleWithEvenOdd = DayScheduleWithEvenOdd[];
 
 export type ThemeColor = keyof typeof defaultTheme.colors;
+
+export interface StudentIdentity {
+  studentName: string;
+  studentNumber: string;
+  academicOrientation: string;
+}
+
+export interface ServerResponseForSendWeekSchedules {
+  verificationCode: number;
+  expire: number;
+}

@@ -1,50 +1,9 @@
-import {
-  extractGeneralWeekSchedule,
-  extractIdentity,
-  constructWeekSchedule,
-} from "@root/src/shared/golestan/payload-78";
-import * as types from "@root/src/types/types";
-import { CSSProperties, useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import CountDown from "@pages/content/verification/components/CountDown";
-import GlobalStyle from "@root/src/pages/content/verification/GlobalStyle";
-import CloseAppButton from "@root/src/pages/content/verification/components/CloseAppButton";
-
-function getWeekSchedule() {
-  try {
-    const generalWeekSchedule = extractGeneralWeekSchedule();
-    const evenWeekSchedule = constructWeekSchedule(generalWeekSchedule, "even") as types.WeekSchedule;
-    const oddWeekSchedule = constructWeekSchedule(generalWeekSchedule, "odd") as types.WeekSchedule;
-
-    return {
-      evenWeekSchedule,
-      oddWeekSchedule,
-    };
-  } catch (error) {
-    return undefined;
-  }
-}
-
-async function sendToBotServer(identity, weekSchedules) {
-  const { evenWeekSchedule, oddWeekSchedule } = weekSchedules;
-
-  console.group();
-  console.log("send to bot server is called:", identity, weekSchedules);
-  return;
-
-  try {
-    const response = await axios.post("https://calm-gold-angler-tutu.cyclic.app/setWeekSchedule", {
-      identity,
-      evenWeekSchedule,
-      oddWeekSchedule,
-    });
-
-    return response.data as number;
-  } catch (error) {
-    return undefined;
-  }
-}
+import CloseAppButton from "@pages/content/verification/components/CloseAppButton";
+import useVerificationCode from "@pages/content/verification/hooks/useVerificationCode";
+import useWeekSchedule from "@pages/content/verification/hooks/useWeekSchedule";
 
 const StyledVerificationCode = styled.div`
   display: flex;
@@ -119,36 +78,14 @@ const ExpiredText = styled.p`
   text-align: center;
 `;
 
-function VerificationCode({ code }: VerificationCodeProps) {
-  const [verificationCode, setVerificationCode] = useState<number | undefined>(undefined);
-  const [hidden, setHidden] = useState(false);
+function VerificationCode() {
   const [expired, setExpired] = useState(false);
+  const { getVerificationCodeFor, expire, verificationCode } = useVerificationCode();
+  const weekSchedules = useWeekSchedule();
 
-  // useEffect(() => {
-  //   const weekSchedules = getWeekSchedule();
-  //   const identity = extractIdentity();
-
-  //   if (!weekSchedules) {
-  //     return;
-  //   }
-
-  //   (async () => {
-  //     const serverResponse = await sendToBotServer(identity, weekSchedules);
-
-  //     if (serverResponse !== undefined) {
-  //       setVerificationCode(serverResponse);
-  //     }
-
-  //     // show on the screen
-  //     // with a count down
-  //     // when it expires, disappear
-  //     //TODO render verification code component
-  //   })();
-  // }, [trigger]);
-
-  if (hidden) {
-    return undefined;
-  }
+  useEffect(() => {
+    getVerificationCodeFor(weekSchedules);
+  });
 
   return (
     <StyledVerificationCode>
@@ -157,13 +94,16 @@ function VerificationCode({ code }: VerificationCodeProps) {
           <Title>برنامه هفتگی شما</Title>
 
           <DigitsContainer>
-            {code.split("").map((digit, i) => (
-              <Digit key={i}>{digit}</Digit>
-            ))}
+            {verificationCode
+              .toString()
+              .split("")
+              .map((digit, i) => (
+                <Digit key={i}>{digit}</Digit>
+              ))}
           </DigitsContainer>
 
           <CountDownWrapper>
-            <CountDown expire={60} onExpire={() => setExpired(true)} />
+            <CountDown expire={expire} onExpire={() => setExpired(true)} />
           </CountDownWrapper>
         </>
       ) : (
@@ -179,7 +119,3 @@ function VerificationCode({ code }: VerificationCodeProps) {
 }
 
 export default VerificationCode;
-
-interface VerificationCodeProps {
-  code: string;
-}
