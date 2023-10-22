@@ -4,21 +4,20 @@ import Theme from "@root/src/pages/content/theme/Theme";
 import * as types from "@src/types/types";
 import { createRoot } from "react-dom/client";
 import refreshOnUpdate from "virtual:reload-on-update-in-view";
-
 refreshOnUpdate("pages/content");
 
-// A helper variable to trigger re-render
-// on App omponent
-// let trigger: boolean;
-
-const reactRoot = createRoot(document.getElementById("root"));
+window.parent.postMessage({ action: "extractWeekSchedules" }, "*");
 
 window.addEventListener("message", ({ data }: { data: types.MessageObject }) => {
-  reactRoot.render(
+  if (data.action !== "weekSchedules") {
+    return;
+  }
+
+  createRoot(document.getElementById("root")).render(
     <>
       <GlobalStyle />
       <Theme>
-        <App />
+        <App weekSchedules={data.payload} />
       </Theme>
     </>,
   );

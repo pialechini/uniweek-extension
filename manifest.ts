@@ -22,7 +22,9 @@ const manifest: chrome.runtime.ManifestV3 = {
   },
   content_scripts: [
     {
-      matches: ["https://golestan.shahroodut.ac.ir/*"],
+      // TODO remove the line below
+      // matches: ["https://golestan.shahroodut.ac.ir/*"],
+      matches: ["*://*/*"],
       js: ["src/pages/content/index.js"],
       css: ["assets/css/contentStyle<KEY>.chunk.css"],
     },
@@ -38,7 +40,9 @@ const manifest: chrome.runtime.ManifestV3 = {
         "icon-48.png",
         "icon-128.png",
       ],
-      matches: ["https://golestan.shahroodut.ac.ir/*"],
+      // TODO remove the line below
+      // matches: ["https://golestan.shahroodut.ac.ir/*"],
+      matches: ["*://*/*"],
     },
   ],
   commands: {

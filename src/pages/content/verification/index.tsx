@@ -1,7 +1,30 @@
+import {
+  constructWeekSchedule,
+  extractGeneralWeekSchedule,
+  extractIdentity,
+} from "@root/src/shared/golestan/payload-78";
 import * as types from "@root/src/types/types";
 import refreshOnUpdate from "virtual:reload-on-update-in-view";
 
 refreshOnUpdate("pages/content");
+
+function getWeekSchedulesFromThePage() {
+  try {
+    const generalWeekSchedule = extractGeneralWeekSchedule();
+    const evenWeekSchedule = constructWeekSchedule(
+      generalWeekSchedule,
+      "even",
+    ) as types.WeekSchedule;
+    const oddWeekSchedule = constructWeekSchedule(generalWeekSchedule, "odd") as types.WeekSchedule;
+
+    return {
+      evenWeekSchedule,
+      oddWeekSchedule,
+    } as types.WeekSchedules;
+  } catch (error) {
+    return undefined;
+  }
+}
 
 const iFrame = document.createElement("iframe");
 iFrame.src = chrome.runtime.getURL("verification.html");
@@ -15,6 +38,7 @@ left: 50%;
 transform: translate(-50%, -50%);
 border-radius: 6px;
 border: none;
+z-index: 100;
 `;
 
 function renderIframe() {
@@ -31,6 +55,37 @@ chrome.runtime.onMessage.addListener(async (message: types.MessageObject) => {
   }
 
   renderIframe();
+});
+
+window.addEventListener("message", ({ data }: { data: types.MessageObject }) => {
+  if (data.action !== "extractWeekSchedules") {
+    return;
+  }
+
+  iFrame.contentWindow.postMessage(
+    {
+      action: "weekSchedules",
+      payload: {
+        studentIdentity: extractIdentity(),
+        ...getWeekSchedulesFromThePage(),
+      },
+      // TODO remove the lines below
+      // payload: {
+      //   studentIdentity: {
+      //     studentName: "mobin",
+      //     studentNumber: "999",
+      //     academicOrientation: "fsd",
+      //   } as types.StudentIdentity,
+      //   evenWeekSchedule: [
+      //     [null, null, null, { name: "alpha", location: "beta" }],
+      //   ] as types.WeekSchedule,
+      //   oddWeekSchedule: [
+      //     [null, null, null, { name: "alpha", location: "beta" }],
+      //   ] as types.WeekSchedule,
+      // },
+    },
+    "*",
+  );
 });
 
 window.addEventListener("message", ({ data }: { data: types.MessageObject }) => {

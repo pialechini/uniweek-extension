@@ -1,17 +1,16 @@
 import apiSendWeekSchedule from "@root/src/pages/content/verification/api/send-week-schedules";
-import { extractIdentity } from "@src/shared/golestan/payload-78";
 import tryMultipleTimes from "@src/shared/try-multiple-times";
 import * as types from "@src/types/types";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 function useVerificationCode() {
   const [expire, setExpire] = useState<number>(undefined);
   const [verificationCode, setVerificationCode] = useState<number>(undefined);
   const [weekSchedules, setWeekSchedules] = useState<types.WeekSchedules>(undefined);
-  const identity = useMemo(() => extractIdentity(), []);
+  const [studentIdentity, setStudentIdentity] = useState<types.StudentIdentity>(undefined);
 
   const sendWeekSchedule = async (succeed, failed) => {
-    const serverResponse = await apiSendWeekSchedule(identity, weekSchedules);
+    const serverResponse = await apiSendWeekSchedule(studentIdentity, weekSchedules);
 
     if (!serverResponse) {
       failed("server did not respond");
@@ -34,10 +33,15 @@ function useVerificationCode() {
         setExpire(serverResponse.expire);
       }
     })();
-  }, [weekSchedules]);
+  }, [weekSchedules, studentIdentity]);
 
-  const getVerificationCodeFor = (weekSchedules: types.WeekSchedules) =>
+  const getVerificationCodeFor = (
+    weekSchedules: types.WeekSchedules,
+    studentIdentity: types.StudentIdentity,
+  ) => {
     setWeekSchedules(weekSchedules);
+    setStudentIdentity(studentIdentity);
+  };
 
   return {
     getVerificationCodeFor,

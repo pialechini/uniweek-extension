@@ -1,7 +1,7 @@
 import CloseAppButton from "@pages/content/verification/components/CloseAppButton";
 import CountDown from "@pages/content/verification/components/CountDown";
 import useVerificationCode from "@pages/content/verification/hooks/useVerificationCode";
-import useWeekSchedule from "@pages/content/verification/hooks/useWeekSchedule";
+import * as types from "@src/types/types";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 
@@ -78,18 +78,17 @@ const ExpiredText = styled.p`
   text-align: center;
 `;
 
-function VerificationCode() {
+function VerificationCode({ weekSchedules, studentIdentity }: VerificationCodeProps) {
   const [expired, setExpired] = useState(false);
   const { getVerificationCodeFor, expire, verificationCode } = useVerificationCode();
-  const weekSchedules = useWeekSchedule();
 
   useEffect(() => {
-    getVerificationCodeFor(weekSchedules);
-  });
+    getVerificationCodeFor(weekSchedules, studentIdentity);
+  }, []);
 
   return (
     <StyledVerificationCode>
-      {!expired ? (
+      {!expired && verificationCode ? (
         <>
           <Title>برنامه هفتگی شما</Title>
 
@@ -119,3 +118,8 @@ function VerificationCode() {
 }
 
 export default VerificationCode;
+
+interface VerificationCodeProps {
+  weekSchedules: types.WeekSchedules;
+  studentIdentity: types.StudentIdentity;
+}
