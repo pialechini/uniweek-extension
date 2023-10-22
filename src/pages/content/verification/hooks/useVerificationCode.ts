@@ -1,4 +1,4 @@
-import apiSendWeekSchedule from "@pages/content/verification/api/send-week-schedule";
+import apiSendWeekSchedule from "@root/src/pages/content/verification/api/send-week-schedules";
 import { extractIdentity } from "@src/shared/golestan/payload-78";
 import tryMultipleTimes from "@src/shared/try-multiple-times";
 import * as types from "@src/types/types";

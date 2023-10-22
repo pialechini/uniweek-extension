@@ -1,11 +1,11 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path, { resolve } from "path";
-import makeManifest from "./utils/plugins/make-manifest";
-import customDynamicImport from "./utils/plugins/custom-dynamic-import";
-import addHmr from "./utils/plugins/add-hmr";
-import watchRebuild from "./utils/plugins/watch-rebuild";
+import { defineConfig } from "vite";
 import manifest from "./manifest";
+import addHmr from "./utils/plugins/add-hmr";
+import customDynamicImport from "./utils/plugins/custom-dynamic-import";
+import makeManifest from "./utils/plugins/make-manifest";
+import watchRebuild from "./utils/plugins/watch-rebuild";
 
 const rootDir = resolve(__dirname);
 const srcDir = resolve(rootDir, "src");
@@ -57,7 +57,7 @@ export default defineConfig({
       output: {
         entryFileNames: "src/pages/[name]/index.js",
         chunkFileNames: isDev ? "assets/js/[name].js" : "assets/js/[name].[hash].js",
-        assetFileNames: assetInfo => {
+        assetFileNames: (assetInfo) => {
           const { dir, name: _name } = path.parse(assetInfo.name);
           const assetFolder = dir.split("/").at(-1);
           const name = assetFolder + firstUpperCase(_name);
@@ -73,7 +73,7 @@ export default defineConfig({
 
 function firstUpperCase(str: string) {
   const firstAlphabet = new RegExp(/( |^)[a-z]/, "g");
-  return str.toLowerCase().replace(firstAlphabet, L => L.toUpperCase());
+  return str.toLowerCase().replace(firstAlphabet, (L) => L.toUpperCase());
 }
 
 let cacheInvalidationKey: string = generateKey();

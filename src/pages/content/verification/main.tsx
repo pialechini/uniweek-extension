@@ -1,9 +1,9 @@
-import refreshOnUpdate from "virtual:reload-on-update-in-view";
-import { createRoot } from "react-dom/client";
-import * as types from "@src/types/types";
-import GlobalStyle from "@pages/content/verification/GlobalStyle";
 import App from "@pages/content/verification/App";
+import GlobalStyle from "@pages/content/verification/GlobalStyle";
 import Theme from "@root/src/pages/content/theme/Theme";
+import * as types from "@src/types/types";
+import { createRoot } from "react-dom/client";
+import refreshOnUpdate from "virtual:reload-on-update-in-view";
 
 refreshOnUpdate("pages/content");
 

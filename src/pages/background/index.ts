@@ -8,7 +8,7 @@ async function getCurrentTab() {
   return tab;
 }
 
-chrome.commands.onCommand.addListener(async command => {
+chrome.commands.onCommand.addListener(async (command) => {
   if (command !== "getWeekSchedule") {
     return;
   }

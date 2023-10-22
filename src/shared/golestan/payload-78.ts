@@ -37,9 +37,13 @@ function textAfter(text: string, anchor: string) {
 }
 
 function parseTextContent(textContent) {
-  let [className, classLocation] = textContent.split("محل:").map(t => t.trim());
+  let [className, classLocation] = textContent.split("محل:").map((t) => t.trim());
 
-  const evenOdd = className.endsWith("زوج") ? "even" : className.endsWith("فرد") ? "odd" : undefined;
+  const evenOdd = className.endsWith("زوج")
+    ? "even"
+    : className.endsWith("فرد")
+    ? "odd"
+    : undefined;
 
   className = textBefore(className, "گروه").replace(/ي/g, "ی");
 
@@ -80,7 +84,7 @@ function getTimeIndex(timeString) {
 }
 
 function parseTr(tr: HTMLTableRowElement) {
-  const tds = [...tr.children].filter(td => td.hasAttribute("title"));
+  const tds = [...tr.children].filter((td) => td.hasAttribute("title"));
   const daySchedule = Array.from({ length: 5 }).fill(null);
 
   for (const td of tds) {
@@ -95,19 +99,21 @@ function parseTr(tr: HTMLTableRowElement) {
 
 function getCorrectIframeToQuery() {
   const outerFrame1 = [...document.querySelectorAll("iframe")]
-    .filter(e => e.src.match(".*fid=.*;78.*"))[0]
+    .filter((e) => e.src.match(".*fid=.*;78.*"))[0]
     .contentDocument.querySelector("[name=Master]") as HTMLIFrameElement;
 
-  const outerFrame2 = outerFrame1.contentDocument.querySelector("[name=Header]") as HTMLIFrameElement;
+  const outerFrame2 = outerFrame1.contentDocument.querySelector(
+    "[name=Header]",
+  ) as HTMLIFrameElement;
 
   return outerFrame2.contentDocument.getElementById("Form_Body") as HTMLIFrameElement;
 }
 
-export function extractIdentity() {
+export function extractIdentity(): types.StudentIdentity {
   const iframe = getCorrectIframeToQuery();
 
   let [studentNumber, studentName, academicOrientation] = ["Table2_1", "Table2_2", "Table2_5"].map(
-    string => iframe.contentDocument.getElementById(string).textContent,
+    (string) => iframe.contentDocument.getElementById(string).textContent,
   );
 
   studentName = textAfter(studentName, "نام و نام خانوادگي : ").replace(/ي/g, "ی");
@@ -127,7 +133,8 @@ export function extractGeneralWeekSchedule() {
   const iframe = getCorrectIframeToQuery();
 
   const tableDiv =
-    iframe.contentDocument.getElementById("DIVVarRem_2") ?? iframe.contentDocument.getElementById("DIVVarRem_3");
+    iframe.contentDocument.getElementById("DIVVarRem_2") ??
+    iframe.contentDocument.getElementById("DIVVarRem_3");
 
   const days = [...tableDiv.querySelectorAll("tr")];
 
@@ -136,9 +143,12 @@ export function extractGeneralWeekSchedule() {
   return days.map(parseTr) as types.WeekScheduleWithEvenOdd;
 }
 
-export function constructWeekSchedule(generalWeekSchedule: types.WeekScheduleWithEvenOdd, evenOrOdd: "even" | "odd") {
-  return generalWeekSchedule.map(day =>
-    day.map(uniClass => {
+export function constructWeekSchedule(
+  generalWeekSchedule: types.WeekScheduleWithEvenOdd,
+  evenOrOdd: "even" | "odd",
+) {
+  return generalWeekSchedule.map((day) =>
+    day.map((uniClass) => {
       if (uniClass !== null) {
         if (uniClass.evenOdd === undefined || uniClass.evenOdd === evenOrOdd) {
           return { name: uniClass.name, location: uniClass.location };

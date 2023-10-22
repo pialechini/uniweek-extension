@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { styled } from "styled-components";
-import CountDown from "@pages/content/verification/components/CountDown";
 import CloseAppButton from "@pages/content/verification/components/CloseAppButton";
+import CountDown from "@pages/content/verification/components/CountDown";
 import useVerificationCode from "@pages/content/verification/hooks/useVerificationCode";
 import useWeekSchedule from "@pages/content/verification/hooks/useWeekSchedule";
+import { useEffect, useState } from "react";
+import { styled } from "styled-components";
 
 const StyledVerificationCode = styled.div`
   display: flex;

@@ -1,5 +1,5 @@
-import refreshOnUpdate from "virtual:reload-on-update-in-view";
 import * as types from "@root/src/types/types";
+import refreshOnUpdate from "virtual:reload-on-update-in-view";
 
 refreshOnUpdate("pages/content");
 
