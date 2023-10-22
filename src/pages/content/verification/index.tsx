@@ -67,22 +67,8 @@ window.addEventListener("message", ({ data }: { data: types.MessageObject }) => 
       action: "weekSchedules",
       payload: {
         studentIdentity: extractIdentity(),
-        ...getWeekSchedulesFromThePage(),
+        weekSchedules: getWeekSchedulesFromThePage(),
       },
-      // TODO remove the lines below
-      // payload: {
-      //   studentIdentity: {
-      //     studentName: "mobin",
-      //     studentNumber: "999",
-      //     academicOrientation: "fsd",
-      //   } as types.StudentIdentity,
-      //   evenWeekSchedule: [
-      //     [null, null, null, { name: "alpha", location: "beta" }],
-      //   ] as types.WeekSchedule,
-      //   oddWeekSchedule: [
-      //     [null, null, null, { name: "alpha", location: "beta" }],
-      //   ] as types.WeekSchedule,
-      // },
     },
     "*",
   );

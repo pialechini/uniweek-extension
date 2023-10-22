@@ -17,7 +17,10 @@ window.addEventListener("message", ({ data }: { data: types.MessageObject }) => 
     <>
       <GlobalStyle />
       <Theme>
-        <App weekSchedules={data.payload} />
+        <App
+          weekSchedules={data.payload.weekSchedules}
+          studentIdentity={data.payload.studentIdentity}
+        />
       </Theme>
     </>,
   );

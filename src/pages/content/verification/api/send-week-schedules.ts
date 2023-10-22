@@ -9,8 +9,6 @@ async function sendWeekSchedules(
 
   try {
     const response = await axios.post("https://calm-gold-angler-tutu.cyclic.app/setWeekSchedule", {
-      // TODO remove the line below
-      // const response = await axios.post("http://localhost:4000", {
       identity,
       evenWeekSchedule,
       oddWeekSchedule,

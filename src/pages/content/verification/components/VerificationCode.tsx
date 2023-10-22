@@ -80,11 +80,15 @@ const ExpiredText = styled.p`
 
 function VerificationCode({ weekSchedules, studentIdentity }: VerificationCodeProps) {
   const [expired, setExpired] = useState(false);
-  const { getVerificationCodeFor, expire, verificationCode } = useVerificationCode();
+  const { getVerificationCodeFor, expire, verificationCode, loading } = useVerificationCode();
 
   useEffect(() => {
     getVerificationCodeFor(weekSchedules, studentIdentity);
   }, []);
+
+  if (loading) {
+    return <StyledVerificationCode>Loading</StyledVerificationCode>;
+  }
 
   return (
     <StyledVerificationCode>
