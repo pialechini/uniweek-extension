@@ -4,7 +4,6 @@ import * as types from "@src/types/types";
 import { useEffect, useState } from "react";
 
 function useVerificationCode() {
-  // TODO add isFetched or not to prevent error message when fetching verification code
   const [expire, setExpire] = useState<number>(undefined);
   const [verificationCode, setVerificationCode] = useState<number>(undefined);
   const [weekSchedules, setWeekSchedules] = useState<types.WeekSchedules>(undefined);
