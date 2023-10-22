@@ -14,12 +14,6 @@ refreshOnUpdate("pages/content");
 const reactRoot = createRoot(document.getElementById("root"));
 
 window.addEventListener("message", ({ data }: { data: types.MessageObject }) => {
-  console.log(data);
-
-  if (data.action !== "getWeekSchedule") {
-    return;
-  }
-
   reactRoot.render(
     <>
       <GlobalStyle />
@@ -29,11 +23,3 @@ window.addEventListener("message", ({ data }: { data: types.MessageObject }) => 
     </>,
   );
 });
-
-// window.addEventListener("message", ({ data }: { data: types.MessageObject }) => {
-//   if (data.action !== "close") {
-//     return;
-//   }
-
-//   reactRoot.unmount();
-// });

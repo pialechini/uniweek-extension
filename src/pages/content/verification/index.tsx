@@ -31,7 +31,6 @@ chrome.runtime.onMessage.addListener(async (message: types.MessageObject) => {
   }
 
   renderIframe();
-  iFrame.contentWindow.postMessage(message, "*");
 });
 
 window.addEventListener("message", ({ data }: { data: types.MessageObject }) => {

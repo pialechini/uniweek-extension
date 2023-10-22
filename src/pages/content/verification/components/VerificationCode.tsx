@@ -7,8 +7,9 @@ import * as types from "@root/src/types/types";
 import { CSSProperties, useEffect, useState } from "react";
 import axios from "axios";
 import { styled } from "styled-components";
-import CountDown from "./CountDown";
+import CountDown from "@pages/content/verification/components/CountDown";
 import GlobalStyle from "@root/src/pages/content/verification/GlobalStyle";
+import CloseAppButton from "@root/src/pages/content/verification/components/CloseAppButton";
 
 function getWeekSchedule() {
   try {
@@ -101,21 +102,6 @@ const CountDownWrapper = styled.div`
   margin-top: 24px;
 `;
 
-const CloseButton = styled.button`
-  width: 130px;
-  padding: 8px 0;
-  font-size: 14px;
-  position: fixed;
-  bottom: 55px;
-  border-radius: 4px;
-  background-color: #2986a3;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: #25dfd4;
-  }
-`;
-
 const ExpiredTextContainer = styled.div`
   margin: 48px 36px;
   display: flex;
@@ -183,11 +169,11 @@ function VerificationCode({ code }: VerificationCodeProps) {
       ) : (
         <ExpiredTextContainer>
           <ExpiredAnimatedText as="p">برنامه منقضی شد</ExpiredAnimatedText>
-          <ExpiredText>لطفا پنجره را رو ببندین و دوباره تلاش کنین</ExpiredText>
+          <ExpiredText>لطفا پنجره رو ببندین و دوباره تلاش کنین</ExpiredText>
         </ExpiredTextContainer>
       )}
 
-      <CloseButton onClick={() => window.parent.postMessage({ action: "close" }, "*")}>بستن صفحه</CloseButton>
+      <CloseAppButton />
     </StyledVerificationCode>
   );
 }
