@@ -35,7 +35,7 @@ jobs:
           draft: false
 
       - name: Create Chrome Extension Zip
-        run: npm run build && mv dist chrome && zip -r chrome.zip chrome
+        run: npm run build && mv dist uniweek-chrome && zip -r uniweek-chrome.zip uniweek-chrome
 
       - name: Upload Chrome Extension Asset
         uses: actions/upload-release-asset@v1
@@ -43,12 +43,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./chrome.zip
-          asset_name: chrome.zip
+          asset_path: ./uniweek-chrome.zip
+          asset_name: uniweek-chrome.zip
           asset_content_type: application/zip
 
       - name: Create Firefox Extension Zip
-        run: npm run build:firefox && mv dist firefox && zip -r firefox.zip firefox
+        run: npm run build:firefox && mv dist uniweek-firefox && zip -r uniweek-firefox.zip uniweek-firefox
 
       - name: Upload Firefox Extension Asset
         uses: actions/upload-release-asset@v1
@@ -56,6 +56,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./firefox.zip
-          asset_name: firefox.zip
+          asset_path: ./uniweek-firefox.zip
+          asset_name: uniweek-firefox.zip
           asset_content_type: application/zip
